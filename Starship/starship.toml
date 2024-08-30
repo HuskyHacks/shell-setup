@@ -113,7 +113,7 @@ symbol = " "
 ssh_symbol = " "
 style = "bold purple"
 ssh_only = false
-format = '[$ssh_symbol](bold blue)@[$hostname](bold purple)\]'
+format = '[$ssh_symbol](bold blue)[@](bold green)[$hostname](bold purple)\]'
 disabled = false
 
 [java]
