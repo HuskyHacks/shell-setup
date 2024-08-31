@@ -27,12 +27,18 @@ configure_starship() {
 	grep -qxF 'eval "$(starship init bash)"' ~/.bashrc || echo 'eval "$(starship init bash)"' >> ~/.bashrc
 }
 
+configure_bashrc() {
+	echo "[+] Configuring bashrc"
+	cp ./bashrc/.bashrc ~/.bashrc && source ~/.bashrc
+}
+
 main () {
 	echo "[+] Ready!"
 	install_apt_packages
 	install_starship
 	install_nerdfont
 	configure_starship
+	configure_bashrc
 	echo "[+] Done!"
 }
 
