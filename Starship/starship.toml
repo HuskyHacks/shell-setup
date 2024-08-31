@@ -32,8 +32,8 @@ show_always = true
 
 [time]
 disabled = false
-time_format = "%R"              # Hour:Minute Format
-style = "bg:#282a36 fg:#f8f8f2"
+time_format = "[%R]"           # Hour:Minute Format
+style = "bold yellow"
 format = '[  $time ]($style)'
 
 [directory.substitutions]
