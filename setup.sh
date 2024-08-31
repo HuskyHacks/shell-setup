@@ -34,7 +34,7 @@ configure_bashrc() {
 
 configure_neofetch(){
 	echo "[+] Configuring neofetch"
-	mkdir ~/.config/neofetch/
+	mkdir ~/.config/neofetch/ 2>/dev/null
 	cp ./neofetch/config.conf ~/.config/neofetch/config.conf
 	cp ./neofetch/snake.txt ~/.config/neofetch/snake.txt
 }
