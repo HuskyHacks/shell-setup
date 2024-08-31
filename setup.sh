@@ -2,7 +2,7 @@
 
 install_apt_packages() {
 	echo "[+] Installing apt packages"
-	sudo apt update && sudo apt install -y cmake gcc pkg-config fontconfig libfontconfig1-dev unzip
+	sudo apt update && sudo apt install -y cmake gcc pkg-config fontconfig libfontconfig1-dev unzip neofetch
 }
 
 install_nerdfont() {
@@ -32,6 +32,13 @@ configure_bashrc() {
 	cp ./bashrc/.bashrc ~/.bashrc && source ~/.bashrc
 }
 
+configure_neofetch(){
+	echo "[+] Configuring neofetch"
+	mkdir ~/.config/neofetch/
+	cp ./neofetch/config.conf ~/.config/neofetch/config.conf
+	cp ./neofetch/snake.txt ~/.config/neofetch/snake.txt
+}
+
 main () {
 	echo "[+] Ready!"
 	install_apt_packages
@@ -39,6 +46,7 @@ main () {
 	install_nerdfont
 	configure_starship
 	configure_bashrc
+	configure_neofetch
 	echo "[+] Done!"
 }
 

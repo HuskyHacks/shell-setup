@@ -108,4 +108,5 @@ export PATH=$PATH:/usr/local/go/bin
 . "$HOME/.cargo/env"
 
 # Initialize Starship prompt
+/usr/bin/neofetch --color_blocks off
 eval "$(starship init bash)"
