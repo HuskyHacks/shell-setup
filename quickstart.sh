@@ -1,9 +1,16 @@
 #!/bin/bash
 
 cloneRepo() {
-    echo "[+] Cloning..."
+    echo "[+] Checking if shell-setup directory exists..."
     cd ~/
-    git clone https://github.com/HuskyHacks/shell-setup.git && cd shell-setup/
+    if [ -d "shell-setup" ]; then
+        echo "[+] shell-setup directory already exists. Skipping clone..."
+        cd shell-setup/
+    else
+        echo "[+] Cloning shell-setup..."
+        git clone https://github.com/HuskyHacks/shell-setup.git && cd shell-setup/
+    fi
+
     echo "[+] Running setup.sh..."
     ./setup.sh
 }
