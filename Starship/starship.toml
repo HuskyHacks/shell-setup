@@ -48,6 +48,7 @@ format = '[  $time ]($style)'
 [aws]
 symbol = " "
 style = "bold orange"
+disabled = true
 
 [buf]
 symbol = " "
