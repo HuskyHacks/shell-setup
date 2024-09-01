@@ -30,7 +30,9 @@ configure_starship() {
 configure_fish() {
     echo "[+] Configuring Fish"
     mkdir -p ~/.config/fish
+    mkdir -p ~/.config/fish/conf.d
     cp ./fish/* ~/.config/fish
+    cp ./fish/dracula.fish ~/.config/fish/conf.d/
     grep -qxF 'starship init fish | source' ~/.config/fish/config.fish || echo 'starship init fish | source' >> ~/.config/fish/config.fish
 }
 

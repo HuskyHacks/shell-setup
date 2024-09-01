@@ -64,7 +64,6 @@ fi
 alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
-alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history | tail -n1 | sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 alias flag='head /dev/urandom | md5sum | cut -d " " -f1 | xargs printf "flag{%s}\n"'
 alias dockershell="sudo docker run --rm -i -t --entrypoint=/bin/bash"
 alias dockershellsh="sudo docker run --rm -i -t --entrypoint=/bin/sh"
