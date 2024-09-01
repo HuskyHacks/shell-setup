@@ -5,6 +5,14 @@ Forked from and inspired by Taggart's [shell setup repo](https://github.com/mtta
 
 ## Quickstart
 
+### One Liner Quickstart
+Cuz who doesn't like curling right to the shell?
+
+```bash
+$ curl https://raw.githubusercontent.com/HuskyHacks/shell-setup/main/quickstart.sh | sh
+```
+
+### Clone & Install
 ```bash
 git clone https://github.com/HuskyHacks/shell-setup
 cd shell-setup
