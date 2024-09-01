@@ -46,7 +46,7 @@ format = '[  $time ]($style)'
 
 # All Nerdfont glyphs
 [aws]
-symbol = "  "
+symbol = " "
 style = "bold orange"
 
 [buf]
