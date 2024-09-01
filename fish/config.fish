@@ -1,3 +1,5 @@
+set fish_greeting ""
+
 function dockershellhere
     set dirname (basename (pwd))
     sudo docker run --rm -it --entrypoint=/bin/bash -v (pwd):/{$dirname} -w /{$dirname} $argv
@@ -26,9 +28,9 @@ alias diff 'diff --color=auto'
 alias ip 'ip --color=auto'
 
 # Additional aliases
-alias ll 'ls -alF'
-alias la 'ls -A'
-alias l 'ls -CF'
+alias ll 'ls -alFh'
+alias la 'ls -Ah'
+alias l 'ls -CFh'
 
 # Flag alias to generate random flag strings
 alias flag 'head /dev/urandom | md5sum | cut -d " " -f1 | xargs printf "flag{%s}\n"'
