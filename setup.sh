@@ -23,8 +23,8 @@ install_starship() {
 configure_tmux() {
         echo "[+] Configuring tmux"
         echo "[+] Installing TPM"
-        git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
-        echo "[+] Installing TMux Conf"
+        git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm 2>/dev/null
+        echo "[+] Installing tmux Conf"
         cp ./tmux/.tmux.conf ~/.tmux.conf
         echo "[+] Remember to exit all sessions and press C-B+I from a new tmux session to install!"
 }
