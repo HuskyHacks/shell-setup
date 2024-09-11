@@ -2,7 +2,7 @@
 
 install_apt_packages() {
     echo "[+] Installing apt packages"
-    sudo apt update && sudo apt install -y cmake gcc pkg-config fish fontconfig libfontconfig1-dev unzip neofetch
+    sudo apt update && sudo apt install -y cmake gcc pkg-config fish fontconfig libfontconfig1-dev unzip neofetch tmux
 }
 
 install_nerdfont() {
@@ -18,6 +18,15 @@ install_nerdfont() {
 install_starship() {
     echo "[+] Installing Starship"
     curl -sS https://starship.rs/install.sh | sh -s -- -y
+}
+
+configure_tmux() {
+        echo "[+] Configuring tmux"
+        echo "[+] Installing TPM"
+        git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+        echo "[+] Installing TMux Conf"
+        cp ./tmux/.tmux.conf ~/.tmux.conf
+        echo "[+] Remember to exit all sessions and press C-B+I from a new tmux session to install!"
 }
 
 configure_starship() {
@@ -60,6 +69,7 @@ main() {
     configure_fish
     install_starship
     install_nerdfont
+    configure_tmux
     configure_starship
     configure_neofetch
     configure_bashrc
