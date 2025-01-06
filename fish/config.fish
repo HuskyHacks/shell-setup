@@ -19,6 +19,24 @@ function pythonserve
     python3 -m http.server $port
 end
 
+function guidnow
+    if test (count $argv) -ne 1
+        echo "Usage: guidnow <N>"
+        return 1
+    end
+
+    set N $argv[1]
+    if test $N -lt 1
+        echo "N must be a positive integer."
+        return 1
+    end
+
+    for i in (seq 1 $N)
+        printf (uuidgen)'\n'
+    end
+end
+
+
 # Define color aliases for ls, grep, and related commands
 alias ls 'ls --color=auto'
 alias grep 'grep --color=auto'
@@ -42,7 +60,9 @@ alias dockershellsh 'sudo docker run --rm -i -t --entrypoint=/bin/sh'
 # Export PATH and other environment variables
 set -gx PATH $PATH /usr/local/go/bin
 set -gx PATH $PATH $HOME/.cargo/env
+set -U fish_user_paths $HOME/.local/bin $fish_user_paths
 
 # Initialize Starship prompt
 /usr/bin/neofetch --color_blocks off
-starship init fish | source
+#starship init fish | source
+starship init fish --print-full-init | sed 's/"$(commandline)"/(commandline | string collect)/' | source
