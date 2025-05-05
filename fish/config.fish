@@ -36,6 +36,10 @@ function guidnow
     end
 end
 
+function poetry-shell
+    set -l activate_command (poetry env activate)
+    eval $activate_command
+end
 
 # Define color aliases for ls, grep, and related commands
 alias ls 'ls --color=auto'
