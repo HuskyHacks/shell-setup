@@ -4,6 +4,7 @@ Dotfiles and configs for husky@mattlab.
 Forked from and inspired by Taggart's [shell setup repo](https://github.com/mttaggart/shell-setup) ♥
 
 ## Quickstart
+> 📝 No need to invoke `sudo` when executing the install script. The script will invoke `sudo` and prompt for credentials on its own.
 
 ### One Liner Quickstart
 Cuz who doesn't like curling right to the shell?
