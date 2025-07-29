@@ -80,7 +80,7 @@ function __jn_init --description "Poetry + JupyterLab bootstrap (data/ dir, Drac
         return 1
     end
 
-    poetry init --name "$project" --description "" -n   # no positional arg!
+    poetry init --name "$project" --description "" -n
 
     if set -q _flag_python
         poetry env use $_flag_python >/dev/null
@@ -110,8 +110,7 @@ function __jn_init --description "Poetry + JupyterLab bootstrap (data/ dir, Drac
     else
         printf "# %s\n" "$project" > README.md
     end
-
-
+    
     # optional git snapshot
     # git init -q
     # echo -e ".ipynb_checkpoints/\n__pycache__/\n.env/\n" > .gitignore
