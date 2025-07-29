@@ -45,16 +45,17 @@ configure_fish() {
     cp ./fish/* ~/.config/fish
     cp ./fish/dracula.fish ~/.config/fish/conf.d/
 
-    starship_workaround=$(cat <<'EOF'
-starship init fish --print-full-init | sed 's/"$(commandline)"/(commandline | string collect)/' | source
-EOF
-    )
-    if ! grep -qxF "$starship_workaround" ~/.config/fish/config.fish; then
-        echo "$starship_workaround" >> ~/.config/fish/config.fish
-        echo "[+] Added Starship initialization workaround to config.fish"
-    else
-        echo "[+] Starship initialization workaround already exists in config.fish"
-    fi
+#    starship_workaround=$(cat <<'EOF'
+#starship init fish --print-full-init | sed 's/"$(commandline)"/(commandline | string collect)/' | source
+#EOF
+#    )
+#    if ! grep -qxF "$starship_workaround" ~/.config/fish/config.fish; then
+#        echo "$starship_workaround" >> ~/.config/fish/config.fish
+#        echo "[+] Added Starship initialization workaround to config.fish"
+#    else
+#        echo "[+] Starship initialization workaround already exists in config.fish"
+#    fi
+
 }
 
 configure_bashrc() {
