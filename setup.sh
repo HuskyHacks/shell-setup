@@ -2,7 +2,7 @@
 
 install_apt_packages() {
     echo "[+] Installing apt packages"
-    sudo apt update && sudo apt install -y cmake gcc pkg-config fish fontconfig libfontconfig1-dev unzip neofetch tmux
+    sudo apt update && sudo apt install -y cmake gcc pkg-config fish fontconfig libfontconfig1-dev unzip p7zip-full neofetch tmux
 }
 
 install_nerdfont() {
