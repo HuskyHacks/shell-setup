@@ -80,8 +80,11 @@ function __jn_init --description "Poetry + JupyterLab bootstrap (data/ dir, Drac
         return 1
     end
 
-    poetry new $project --name "$project" --readme md $__flag_python
-    cd $project
+    poetry init --name "$project" --description "" -n   # no positional arg!
+
+    if set -q _flag_python
+        poetry env use $_flag_python >/dev/null
+    end
 
     poetry add --group dev jupyterlab JLDracula >/dev/null
     poetry install --no-root >/dev/null
