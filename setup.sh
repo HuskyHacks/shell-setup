@@ -56,6 +56,43 @@ install_starship() {
     curl -sS https://starship.rs/install.sh | sh -s -- -y >/dev/null
 }
 
+install_poetry() {
+    echo "[+] Checking for Poetry…"
+
+    if command -v poetry >/dev/null 2>&1; then
+        echo "[+] Poetry already installed – skipping"
+        return 0
+    fi
+
+    echo "[+] Installing Poetry via install.python-poetry.org"
+    curl -sSL https://install.python-poetry.org | python3 - >/dev/null
+
+    local POETRY_BIN="$HOME/.local/bin/poetry"
+    if [[ ! -x $POETRY_BIN ]]; then
+        echo "[!] Poetry installation failed (binary not found)"; exit 1
+    fi
+    echo "[+] Poetry installed to $POETRY_BIN"
+
+    if ! grep -qx 'export PATH="$HOME/.local/bin:$PATH"' ~/.bashrc 2>/dev/null; then
+        echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
+        echo "[i] Added ~/.local/bin to PATH in ~/.bashrc"
+    fi
+
+    if command -v fish >/dev/null 2>&1; then
+        mkdir -p ~/.config/fish/conf.d
+        local FISH_PATH_SNIPPET=~/.config/fish/conf.d/poetry_path.fish
+        if ! grep -q 'fish_user_paths.*\.local/bin' "$FISH_PATH_SNIPPET" 2>/dev/null; then
+            echo 'set -Ua fish_user_paths $HOME/.local/bin' > "$FISH_PATH_SNIPPET"
+            echo "[i] Added ~/.local/bin to Fish user paths (conf.d/poetry_path.fish)"
+        fi
+
+        mkdir -p ~/.config/fish/completions
+        poetry completions fish > ~/.config/fish/completions/poetry.fish
+        echo "[i] Installed Poetry tab‑completion for Fish"
+    fi
+}
+
+
 configure_tmux() {
     echo "[+] Configuring tmux"
     git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm 2>/dev/null || true
@@ -105,6 +142,7 @@ main() {
     configure_fish
     install_starship
     install_nerdfont
+    install_poetry
     configure_tmux
     configure_starship
     configure_neofetch
