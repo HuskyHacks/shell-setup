@@ -83,7 +83,6 @@ function __jn_init --description "Poetry + JupyterLab bootstrap (data/ dir, Drac
     poetry new $project --name "$project" --readme md $__flag_python
     cd $project
 
-    # add JupyterLab + Dracula theme (pre‑built wheel, no Node needed)
     poetry add --group dev jupyterlab JLDracula >/dev/null
     poetry install --no-root >/dev/null
 
