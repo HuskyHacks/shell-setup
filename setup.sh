@@ -111,8 +111,10 @@ configure_starship() {
 configure_fish() {
     echo "[+] Configuring Fish"
     mkdir -p ~/.config/fish/conf.d
+    mkdir -p ~/.config/fish/completions
     cp ./fish/* ~/.config/fish
     cp ./fish/dracula.fish ~/.config/fish/conf.d/
+    cp ./fish/poetry.fish ~/.config/fish/completions/poetry.fish
 }
 
 configure_bashrc() {
