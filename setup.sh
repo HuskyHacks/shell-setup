@@ -21,8 +21,7 @@ install_apt_packages() {
         p7zip-full \
         neofetch \
         tmux \
-        plocate
-        >/dev/null
+        plocate                  >/dev/null
 }
 
 install_docker() {
