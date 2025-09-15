@@ -1,0 +1,30 @@
+name: CI
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  run-setup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Make setup.sh executable (if needed)
+        run: chmod +x ./setup.sh
+
+      - name: Run setup.sh with strict bash
+        id: run_setup
+        shell: bash
+        run: |
+          set -euo pipefail
+          ./setup.sh 2>&1 | tee setup.log
+
+      - name: Upload setup log on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: setup-log
+          path: setup.log
