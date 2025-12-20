@@ -17,7 +17,7 @@ install_apt_packages() {
     sudo apt-get install -y --no-install-recommends \
         ca-certificates curl wget gnupg git \
         cmake gcc pkg-config fish fontconfig libfontconfig1-dev \
-        unzip p7zip-full neofetch tmux plocate >/dev/null
+        unzip p7zip-full neofetch tmux plocate libnotify4 libsecret-1-0 >/dev/null
 }
 
 install_obsidian() {
