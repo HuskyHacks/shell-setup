@@ -1,0 +1,82 @@
+name: setup.sh smoke test
+
+on:
+    push:
+    pull_request:
+    workflow_dispatch:
+
+jobs:
+    ubuntu-smoke:
+        runs-on: ubuntu-latest
+        timeout-minutes: 25
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Basic lint (bash -n)
+              shell: bash
+              run: |
+                  set -euo pipefail
+                  bash -n ./setup.sh
+
+            - name: Install shellcheck
+              shell: bash
+              run: |
+                  set -euo pipefail
+                  sudo apt-get update -qq
+                  sudo apt-get install -y --no-install-recommends shellcheck >/dev/null
+
+            - name: ShellCheck
+              shell: bash
+              run: |
+                  set -euo pipefail
+                  shellcheck ./setup.sh
+
+            - name: Run setup.sh (CI mode)
+              shell: bash
+              env:
+                  CI: "true"
+                  MATT_SKIP_WELCOME: "1"
+              run: |
+                  set -euo pipefail
+                  chmod +x ./setup.sh
+                  ./setup.sh
+
+            - name: Post-install validation (fish + starship)
+              shell: bash
+              run: |
+                  set -euo pipefail
+
+                  command -v fish
+                  command -v starship
+
+                  echo "[+] starship version:"
+                  starship --version
+
+                  echo "[+] fish version:"
+                  fish --version
+
+                  echo "[+] Validate fish loads config without errors"
+                  # -l = login shell, -c = run command; this will source config files
+                  fish -lc 'echo "fish login ok"'
+
+                  echo "[+] Validate starship init works in fish"
+                  fish -lc 'starship init fish | source; echo "starship init ok"'
+
+                  echo "[+] Validate starship full-init fallback path (should still parse)"
+                  fish -lc 'starship init fish --print-full-init | head -n 5 >/dev/null; echo "starship full-init ok"'
+
+                  echo "[+] Check expected config files exist"
+                  test -f "$HOME/.config/starship.toml"
+                  test -f "$HOME/.config/fish/config.fish"
+                  test -f "$HOME/.config/fish/conf.d/starship.fish"
+
+            - name: Upload logs (optional)
+              if: failure()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: logs
+                  path: |
+                      /var/log/apt/history.log
+                      /var/log/apt/term.log
