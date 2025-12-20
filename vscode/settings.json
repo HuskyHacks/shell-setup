@@ -1,0 +1,24 @@
+{
+    "workbench.editorAssociations": {
+        "*.ipynb": "jupyter.notebook.ipynb"
+    },
+    "workbench.colorTheme": "Dracula Theme",
+    "workbench.startupEditor": "none",
+    "git.openRepositoryInParentFolders": "never",
+    "editor.renderWhitespace": "trailing",
+    "editor.formatOnSave": true,
+    "editor.formatOnPaste": true,
+    "editor.formatOnType": false,
+    "[python]": {
+        "editor.formatOnType": true
+    },
+    "editor.fontFamily": "FiraCode Nerd Font, Fira Code, monospace",
+    "editor.fontLigatures": true,
+    "terminal.integrated.fontFamily": "FiraCode Nerd Font, monospace",
+    "terminal.integrated.fontWeight": "normal",
+    "terminal.integrated.gpuAcceleration": "canvas",
+    "go.toolsManagement.autoUpdate": true,
+    "chat.commandCenter.enabled": false,
+    "editor.unicodeHighlight.includeStrings": false,
+    "docker.extension.enableComposeLanguageServer": false
+}

@@ -203,6 +203,42 @@ configure_neofetch() {
     cp ./neofetch/snake.txt   ~/.config/neofetch/snake.txt
 }
 
+configure_vscode() {
+    echo "[+] Configuring VS Code"
+
+    if ! command -v code >/dev/null 2>&1; then
+        echo "[i] VS Code not installed; skipping VS Code config"
+        return 0
+    fi
+
+    local VSC_USER_DIR="$HOME/.config/Code/User"
+    mkdir -p "$VSC_USER_DIR"
+    mkdir -p "$VSC_USER_DIR/snippets"
+
+    if [[ -f ./vscode/settings.json ]]; then
+        cp ./vscode/settings.json "$VSC_USER_DIR/settings.json"
+    fi
+
+    if [[ -f ./vscode/keybindings.json ]]; then
+        cp ./vscode/keybindings.json "$VSC_USER_DIR/keybindings.json"
+    fi
+
+    if [[ -d ./vscode/snippets ]]; then
+        cp -r ./vscode/snippets/. "$VSC_USER_DIR/snippets/"
+    fi
+
+    if [[ -f ./vscode/extensions.txt ]]; then
+        echo "[+] Installing VS Code extensions (from vscode/extensions.txt)"
+        while IFS= read -r ext; do
+            [[ -z "$ext" ]] && continue
+            code --install-extension "$ext" --force >/dev/null 2>&1 || {
+                echo "[i] Failed to install extension: $ext (continuing)"
+            }
+        done < ./vscode/extensions.txt
+    fi
+}
+
+
 ensure_fish_shell() {
     local FISH_BIN
     FISH_BIN="$(command -v fish)"
@@ -247,6 +283,7 @@ main() {
     install_nerdfont
     install_poetry
     configure_tmux
+    configure_vscode
     configure_starship
     configure_neofetch
     configure_bashrc
