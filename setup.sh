@@ -13,21 +13,6 @@ trap cleanup EXIT
 
 install_apt_packages() {
     echo "[+] Installing apt packages"
-<<<<<<< Updated upstream
-    sudo apt update -y          >/dev/null
-    sudo apt install -y \
-        cmake  \
-        gcc  \
-        pkg-config  \
-        fish  \
-        fontconfig  \
-        libfontconfig1-dev \
-        unzip  \
-        p7zip-full \
-        neofetch \
-        tmux \
-        plocate                  >/dev/null
-=======
     sudo apt-get update -qq
     sudo apt-get install -y --no-install-recommends \
         ca-certificates curl wget gnupg git \
@@ -53,7 +38,6 @@ install_obsidian() {
         echo "[!] Obsidian installation failed."
         return 1
     fi
->>>>>>> Stashed changes
 }
 
 install_docker() {
@@ -157,6 +141,9 @@ install_poetry() {
     curl -sSL https://install.python-poetry.org | python3 - >/dev/null
 
     local POETRY_BIN="$HOME/.local/bin/poetry"
+    if [[ ! -x $POETRY_BIN ]]; then
+        echo "[!] Poetry installation failed (binary not found)"; exit 1
+    fi
     echo "[+] Poetry installed to $POETRY_BIN"
 
     if ! grep -qx 'export PATH="$HOME/.local/bin:$PATH"' ~/.bashrc 2>/dev/null; then
