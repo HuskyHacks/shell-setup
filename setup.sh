@@ -98,6 +98,28 @@ install_poetry() {
     fi
 }
 
+install_uv() {
+    echo "[+] Checking for uv…"
+
+    if command -v uv >/dev/null 2>&1; then
+        echo "[+] uv already installed – skipping"
+        return 0
+    fi
+
+    echo "[+] Installing uv via astral.sh"
+    curl -LsSf https://astral.sh/uv/install.sh | UV_NO_MODIFY_PATH=1 sh >/dev/null
+
+    local UV_BIN="$HOME/.local/bin/uv"
+    echo "[+] uv installed to $UV_BIN"
+
+    if command -v fish >/dev/null 2>&1; then
+        mkdir -p ~/.config/fish/completions
+        "$UV_BIN" generate-shell-completion fish > ~/.config/fish/completions/uv.fish
+        "$HOME/.local/bin/uvx" --generate-shell-completion fish > ~/.config/fish/completions/uvx.fish
+        echo "[i] Installed uv/uvx tab‑completion for Fish"
+    fi
+}
+
 
 configure_tmux() {
     echo "[+] Configuring tmux"
@@ -150,7 +172,8 @@ main() {
     configure_fish
     install_starship
     install_nerdfont
-    install_poetry
+    # install_poetry
+    install_uv
     configure_tmux
     configure_starship
     configure_neofetch
