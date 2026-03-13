@@ -1,0 +1,7 @@
+dracula-theme.theme-dracula
+golang.go
+ms-azuretools.vscode-docker
+aaron-bond.better-comments
+ms-vscode-remote.remote-wsl
+ms-python.python
+github.vscode-github-actions

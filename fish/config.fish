@@ -116,7 +116,7 @@ function __jn_init --description "Poetry + JupyterLab bootstrap (data/ dir, Drac
     # echo -e ".ipynb_checkpoints/\n__pycache__/\n.env/\n" > .gitignore
     # git add . && git commit -qm "Bootstrap Jupyter project"
 
-    set_color green; echo "✅  Ready!"; set_color normal
+    set_color green; echo "Ready!"; set_color normal
     echo "Run:  poetry run jupyter lab $notebook"
 
     if set -q _flag_open
@@ -126,14 +126,20 @@ end
 
 alias jupyter-notebook-init='__jn_init'
 
-# Export PATH and other environment variables
-set -gx PATH $PATH /usr/local/go/bin
-set -gx PATH $PATH $HOME/.cargo/env
-set -U fish_user_paths $HOME/.local/bin $fish_user_paths
+if test -d /usr/local/go/bin
+    fish_add_path -g /usr/local/go/bin
+end
 
-# Initialize Starship prompt
-/usr/bin/neofetch --color_blocks off
-starship init fish | source
+if test -d "$HOME/.cargo/bin"
+    fish_add_path -g "$HOME/.cargo/bin"
+end
 
-# workaround for broken starship integration, cutting back to normal prompt as of Aug 2025 as it seems to work fine now but keeping here just in case
-#starship init fish --print-full-init | sed 's/"$(commandline)"/(commandline | string collect)/' | source
+fish_add_path -g "$HOME/.local/bin"
+
+if status is-interactive
+    if type -q neofetch
+        neofetch --color_blocks off
+    end
+end
+
+# Starship is initialized in ~/.config/fish/conf.d/starship.fish
