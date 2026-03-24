@@ -41,7 +41,6 @@ function poetry-shell
     eval $activate_command
 end
 
-# Define color aliases for ls, grep, and related commands
 alias ls 'ls --color=auto'
 alias grep 'grep --color=auto'
 alias fgrep 'fgrep --color=auto'
@@ -49,15 +48,12 @@ alias egrep 'egrep --color=auto'
 alias diff 'diff --color=auto'
 alias ip 'ip --color=auto'
 
-# Additional aliases
 alias ll 'ls -alFh'
 alias la 'ls -Ah'
 alias l 'ls -CFh'
 
-# Flag alias to generate random flag strings
 alias flag 'head /dev/urandom | md5sum | cut -d " " -f1 | xargs printf "flag{%s}\n"'
 
-# Docker shell aliases
 alias dockershell 'sudo docker run --rm -i -t --entrypoint=/bin/bash'
 alias dockershellsh 'sudo docker run --rm -i -t --entrypoint=/bin/sh'
 
@@ -110,11 +106,6 @@ function __jn_init --description "Poetry + JupyterLab bootstrap (data/ dir, Drac
     else
         printf "# %s\n" "$project" > README.md
     end
-    
-    # optional git snapshot
-    # git init -q
-    # echo -e ".ipynb_checkpoints/\n__pycache__/\n.env/\n" > .gitignore
-    # git add . && git commit -qm "Bootstrap Jupyter project"
 
     set_color green; echo "Ready!"; set_color normal
     echo "Run:  poetry run jupyter lab $notebook"
@@ -141,5 +132,3 @@ if status is-interactive
         neofetch --color_blocks off
     end
 end
-
-# Starship is initialized in ~/.config/fish/conf.d/starship.fish

@@ -130,6 +130,43 @@ install_starship() {
     starship --version >/dev/null
 }
 
+install_powershell() {
+    if [[ "${MATT_SKIP_POWERSHELL:-}" == "1" ]]; then
+        echo "[i] MATT_SKIP_POWERSHELL=1: skipping PowerShell install"
+        return 0
+    fi
+
+    if command -v pwsh >/dev/null 2>&1; then
+        echo "[+] PowerShell (pwsh) already installed – skipping"
+        return 0
+    fi
+
+    if [[ ! -r /etc/os-release ]]; then
+        echo "[!] Cannot read /etc/os-release; skipping PowerShell install"
+        return 0
+    fi
+
+    # shellcheck source=/dev/null
+    source /etc/os-release
+    if [[ "${ID:-}" != "ubuntu" ]]; then
+        echo "[i] install_powershell: auto-install only supported on Ubuntu; install pwsh manually"
+        return 0
+    fi
+
+    echo "[+] Installing PowerShell via packages.microsoft.com (Ubuntu ${VERSION_ID})"
+    local MS_PKG="$TMPDIR/packages-microsoft-prod.deb"
+    wget -q "https://packages.microsoft.com/config/ubuntu/${VERSION_ID}/packages-microsoft-prod.deb" -O "$MS_PKG"
+    sudo dpkg -i "$MS_PKG" >/dev/null || sudo apt-get -f install -y >/dev/null
+    sudo apt-get update -qq
+    sudo apt-get install -y powershell >/dev/null
+
+    if ! command -v pwsh >/dev/null 2>&1; then
+        echo "[!] pwsh not found after install"
+        return 1
+    fi
+    pwsh --version || true
+}
+
 install_poetry() {
     echo "[+] Checking for Poetry…"
     if command -v poetry >/dev/null 2>&1; then
@@ -163,6 +200,36 @@ install_poetry() {
         poetry completions fish > ~/.config/fish/completions/poetry.fish
         echo "[i] Installed Poetry tab-completion for Fish"
     fi
+
+    if command -v pwsh >/dev/null 2>&1; then
+        mkdir -p ~/.config/powershell/completions
+        poetry completions powershell > ~/.config/powershell/completions/poetry.ps1
+        echo "[i] Installed Poetry tab-completion for PowerShell"
+    fi
+}
+
+_write_uv_shell_completions() {
+    local UV_BIN="$HOME/.local/bin/uv"
+    local UVX_BIN="$HOME/.local/bin/uvx"
+    [[ -x "$UV_BIN" ]] || return 0
+
+    if command -v fish >/dev/null 2>&1; then
+        mkdir -p ~/.config/fish/completions
+        "$UV_BIN" generate-shell-completion fish > ~/.config/fish/completions/uv.fish
+        if [[ -x "$UVX_BIN" ]]; then
+            "$UVX_BIN" --generate-shell-completion fish > ~/.config/fish/completions/uvx.fish
+        fi
+        echo "[i] Installed uv/uvx tab‑completion for Fish"
+    fi
+
+    if command -v pwsh >/dev/null 2>&1; then
+        mkdir -p ~/.config/powershell/completions
+        "$UV_BIN" generate-shell-completion powershell > ~/.config/powershell/completions/uv.ps1
+        if [[ -x "$UVX_BIN" ]]; then
+            "$UVX_BIN" --generate-shell-completion powershell > ~/.config/powershell/completions/uvx.ps1
+        fi
+        echo "[i] Installed uv/uvx tab-completion for PowerShell"
+    fi
 }
 
 install_uv() {
@@ -170,6 +237,7 @@ install_uv() {
 
     if command -v uv >/dev/null 2>&1; then
         echo "[+] uv already installed – skipping"
+        _write_uv_shell_completions
         return 0
     fi
 
@@ -179,12 +247,7 @@ install_uv() {
     local UV_BIN="$HOME/.local/bin/uv"
     echo "[+] uv installed to $UV_BIN"
 
-    if command -v fish >/dev/null 2>&1; then
-        mkdir -p ~/.config/fish/completions
-        "$UV_BIN" generate-shell-completion fish > ~/.config/fish/completions/uv.fish
-        "$HOME/.local/bin/uvx" --generate-shell-completion fish > ~/.config/fish/completions/uvx.fish
-        echo "[i] Installed uv/uvx tab‑completion for Fish"
-    fi
+    _write_uv_shell_completions
 }
 
 configure_tmux() {
@@ -210,6 +273,22 @@ configure_fish() {
     cp ./fish/dracula.fish ~/.config/fish/conf.d/
     cp ./fish/starship.fish ~/.config/fish/conf.d/starship.fish
     cp ./fish/poetry.fish ~/.config/fish/completions/poetry.fish
+}
+
+configure_powershell() {
+    if [[ "${MATT_SKIP_POWERSHELL:-}" == "1" ]]; then
+        echo "[i] MATT_SKIP_POWERSHELL=1: skipping PowerShell profile copy"
+        return 0
+    fi
+
+    echo "[+] Configuring PowerShell"
+    if ! command -v pwsh >/dev/null 2>&1; then
+        echo "[i] pwsh not found; skipping PowerShell profile copy"
+        return 0
+    fi
+
+    mkdir -p ~/.config/powershell/completions
+    cp ./powershell/Microsoft.PowerShell_profile.ps1 ~/.config/powershell/Microsoft.PowerShell_profile.ps1
 }
 
 configure_bashrc() {
@@ -250,10 +329,26 @@ configure_vscode() {
     fi
 
     if [[ -f ./vscode/extensions.txt ]]; then
-        echo "[+] Installing VS Code extensions (from vscode/extensions.txt)"
+        echo "[+] VS Code extensions (from vscode/extensions.txt)"
+        declare -A vscode_installed=()
+        while IFS= read -r line || [[ -n "$line" ]]; do
+            [[ -z "$line" ]] && continue
+            vscode_installed["${line,,}"]=1
+        done < <(code --list-extensions 2>/dev/null || true)
+
         while IFS= read -r ext; do
             [[ -z "$ext" ]] && continue
-            code --install-extension "$ext" --force >/dev/null 2>&1 || {
+            ext="${ext%%#*}"
+            ext="${ext#"${ext%%[![:space:]]*}"}"
+            ext="${ext%"${ext##*[![:space:]]}"}"
+            [[ -z "$ext" ]] && continue
+            local key="${ext,,}"
+            if [[ -n "${vscode_installed[$key]:-}" ]]; then
+                echo "[i] VS Code extension already installed: $ext"
+                continue
+            fi
+            echo "[+] Installing VS Code extension: $ext"
+            code --install-extension "$ext" >/dev/null 2>&1 || {
                 echo "[i] Failed to install extension: $ext (continuing)"
             }
         done < ./vscode/extensions.txt
@@ -277,7 +372,6 @@ ensure_fish_shell() {
 welcome() {
     echo "[+] Done! Welcome to mattlab!"
 
-    # For CI/Automation
     if [[ "${CI:-}" == "true" || "${MATT_SKIP_WELCOME:-}" == "1" ]]; then
         echo "[i] CI mode: skipping chsh + exec fish"
         return 0
@@ -301,13 +395,14 @@ main() {
     install_obsidian
     install_vscode
     install_starship
+    install_powershell
     configure_fish
     install_nerdfont
-    # install_poetry
     install_uv
     configure_tmux
     configure_vscode
     configure_starship
+    configure_powershell
     configure_neofetch
     configure_bashrc
     welcome

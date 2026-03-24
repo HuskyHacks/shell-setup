@@ -15,7 +15,6 @@ function _dracula_update --on-event dracula_update
     _dracula_themes_supported && _dracula_self_destruct
 end
 
-# Dracula Color Palette
 set -l foreground f8f8f2
 set -l selection 44475a
 set -l comment 6272a4
@@ -27,7 +26,6 @@ set -l purple bd93f9
 set -l cyan 8be9fd
 set -l pink ff79c6
 
-# Syntax Highlighting Colors
 set -gx fish_color_normal $foreground
 set -gx fish_color_command $cyan
 set -gx fish_color_keyword $pink
@@ -45,13 +43,11 @@ set -gx fish_color_autosuggestion $comment
 set -gx fish_color_cancel $red --reverse
 set -gx fish_color_option $orange
 
-# Default Prompt Colors
 set -gx fish_color_cwd $green
 set -gx fish_color_host $purple
 set -gx fish_color_host_remote $purple
 set -gx fish_color_user $cyan
 
-# Completion Pager Colors
 set -gx fish_pager_color_progress $comment
 set -gx fish_pager_color_background
 set -gx fish_pager_color_prefix $cyan
