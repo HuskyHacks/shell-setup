@@ -46,9 +46,7 @@ Set-Location shell-setup
 ./setup.ps1
 ```
 
-On Windows, `setup.ps1` **rewrites** your profile with .NET (so it does not inherit the “downloaded from the internet” mark from `Copy-Item`), then `Unblock-File` and removes any `Zone.Identifier` stream on the profile and on `completions\*.ps1`. If you still see the trust prompt, run once: `Unblock-File -LiteralPath $PROFILE` and `Remove-Item -LiteralPath $PROFILE -Stream Zone.Identifier -ErrorAction SilentlyContinue`.
-
-Use `./setup.ps1 -Force` to overwrite an existing Starship config. If **winget** is missing, `setup.ps1` downloads the latest **App Installer** bundle and dependencies from the [winget-cli releases](https://github.com/microsoft/winget-cli/releases/latest) and installs them for your user (no Store required). When winget is available, the script also tries to install [Starship](https://starship.rs/) automatically. Use a [Nerd Font](https://www.nerdfonts.com/) in your terminal for glyphs.
+Use `./setup.ps1 -Force` to overwrite an existing Starship config. If winget is missing, `setup.ps1` downloads the latest App Installer bundle and dependencies from the [winget-cli releases](https://github.com/microsoft/winget-cli/releases/latest) and installs them for your user (no Store required). When winget is available, the script also tries to install [Starship](https://starship.rs/) automatically. Use a [Nerd Font](https://www.nerdfonts.com/) in your terminal for glyphs.
 
 ## PowerShell (`pwsh`)
 
