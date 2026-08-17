@@ -23,16 +23,35 @@ success_symbol = "[λ](bold green)"
 disabled = false
 format = "[$indicator]($style)"
 style = "bold cyan"
-pwsh_indicator = "[](bold orange) "
-powershell_indicator = "[](bold orange) "
+pwsh_indicator = "[ ](bold orange)"
+powershell_indicator = "[ ](bold orange)"
 fish_indicator = ""
 bash_indicator = ""
 zsh_indicator = ""
 
 [cmd_duration]
 style = "bold yellow"
-format = "-> [$duration](bold yellow) "
+format = "[󱎫 $duration]($style) "
 min_time = 500
+show_milliseconds = true
+
+[status]
+disabled = false
+style = "bold red"
+symbol = "󰅙 "
+not_executable_symbol = "󰒃 "
+not_found_symbol = "󰍉 "
+sigint_symbol = "󰜺 "
+signal_symbol = "󱐋 "
+map_symbol = true
+pipestatus = true
+format = '[$symbol$common_meaning$signal_name$maybe_int]($style) '
+
+[sudo]
+disabled = false
+style = "bold orange"
+symbol = "󰌆 "
+format = "[$symbol]($style)"
 
 [jobs]
 format = "[$symbol$number]($style) "
@@ -52,7 +71,7 @@ show_always = true
 [time]
 disabled = false
 time_format = "[%R]"
-style = "bold yellow"
+style = "bold comment"
 format = '  [ $time]($style) '
 
 [directory.substitutions]
@@ -85,10 +104,13 @@ symbol = " "
 
 [directory]
 read_only = " 󰌾"
+read_only_style = "bold red"
 style = "bold cyan"
-format = "[$path]($style)"
+format = "[$path]($style)[$read_only]($read_only_style)"
+truncation_length = 3
 truncation_symbol = ""
 truncate_to_repo = true
+repo_root_style = "bold pink"
 
 [docker_context]
 symbol = " "
@@ -112,6 +134,21 @@ format = " [$symbol$branch(:$remote_branch)]($style) "
 
 [git_status]
 style = "bold red"
+format = '([$all_status$ahead_behind]($style) )'
+conflicted = "[󰩈 $count](bold red) "
+ahead = "[󰁝$count](bold green) "
+behind = "[󰁅$count](bold yellow) "
+diverged = "[󰹹$ahead_count/$behind_count](bold pink) "
+untracked = "[?$count](bold comment) "
+stashed = "[󰓦 $count](bold cyan) "
+modified = "[!$count](bold yellow) "
+staged = "[+$count](bold green) "
+renamed = "[»$count](bold purple) "
+deleted = "[✘$count](bold red) "
+
+[git_state]
+style = "bold pink"
+format = '\([$state( $progress_current/$progress_total)]($style)\) '
 
 [golang]
 symbol = " "
@@ -166,8 +203,8 @@ symbol = " "
 
 [os]
 disabled = false
-style = "bold yellow"
-format = " [$symbol]($style) "
+style = "bold orange"
+format = "[ $symbol ]($style)"
 
 [os.symbols]
 Alpaquita = ""

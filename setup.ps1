@@ -61,6 +61,39 @@ function Install-WingetFromGitHub {
     }
 }
 
+function Install-NerdFont {
+    $version = 'v3.4.0'
+    $fontDir = Join-Path $env:LOCALAPPDATA 'Microsoft\Windows\Fonts'
+    if (Test-Path -LiteralPath (Join-Path $fontDir 'FiraCodeNerdFontMono-Regular.ttf')) {
+        Write-Host '[+] FiraCode Nerd Font already installed - skipping'
+        return
+    }
+
+    $tmp = Join-Path ([IO.Path]::GetTempPath()) ([Guid]::NewGuid().ToString('N'))
+    New-Item -ItemType Directory -Path $tmp | Out-Null
+    try {
+        $zip = Join-Path $tmp 'FiraCode.zip'
+        $ttfDir = Join-Path $tmp 'ttf'
+        $ProgressPreference = 'SilentlyContinue'
+        Write-Host "[+] Downloading FiraCode Nerd Font $version..."
+        Invoke-WebRequest -Uri "https://github.com/ryanoasis/nerd-fonts/releases/download/$version/FiraCode.zip" -OutFile $zip -Headers @{ 'User-Agent' = 'shell-setup-setup.ps1' }
+        Expand-Archive -LiteralPath $zip -DestinationPath $ttfDir
+
+        New-Item -ItemType Directory -Path $fontDir -Force | Out-Null
+        $regKey = 'HKCU:\Software\Microsoft\Windows NT\CurrentVersion\Fonts'
+        New-Item -Path $regKey -Force | Out-Null
+        Get-ChildItem -LiteralPath $ttfDir -Filter '*.ttf' -File | ForEach-Object {
+            $dest = Join-Path $fontDir $_.Name
+            Copy-Item -LiteralPath $_.FullName -Destination $dest -Force
+            Set-ItemProperty -Path $regKey -Name "$($_.BaseName) (TrueType)" -Value $dest
+        }
+        Write-Host '[+] Installed FiraCode Nerd Font (restart the terminal to pick it up)'
+    }
+    finally {
+        Remove-Item -LiteralPath $tmp -Recurse -Force -ErrorAction SilentlyContinue
+    }
+}
+
 if ($IsWindows -and -not (Test-WingetExecutable)) {
     Write-Host '[+] winget not found; installing Windows Package Manager from GitHub...'
     try {
@@ -77,6 +110,11 @@ if ($IsWindows -and -not (Test-WingetExecutable)) {
         Write-Warning "Automatic winget install failed: $($_.Exception.Message)"
         Write-Host 'Install App Installer manually: https://github.com/microsoft/winget-cli/releases/latest'
     }
+}
+
+if ($IsWindows) {
+    try { Install-NerdFont }
+    catch { Write-Warning "Nerd Font install failed: $($_.Exception.Message). Install FiraCode manually: https://www.nerdfonts.com/font-downloads" }
 }
 
 $RepoRoot = $PSScriptRoot

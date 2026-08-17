@@ -128,6 +128,10 @@ end
 fish_add_path -g "$HOME/.local/bin"
 
 if status is-interactive
+    if type -q tmux; and not set -q TMUX; and not set -q NO_TMUX
+        exec tmux new-session -A -s main
+    end
+
     if type -q neofetch
         neofetch --color_blocks off
     end

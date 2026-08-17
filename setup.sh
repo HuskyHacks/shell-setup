@@ -92,19 +92,19 @@ install_vscode() {
 
 install_nerdfont() {
     echo "[+] Installing NerdFont"
-    if compgen -G "/usr/share/fonts/saucecode-pro/*.ttf" >/dev/null; then
+    if compgen -G "/usr/share/fonts/firacode/*.ttf" >/dev/null; then
         echo "[+] NerdFont already installed – skipping"
         return 0
     fi
 
-    local ZIP="$TMPDIR/scp.zip"
-    local OUT="$TMPDIR/scp"
+    local ZIP="$TMPDIR/firacode.zip"
+    local OUT="$TMPDIR/firacode"
 
-    wget -qO "$ZIP" "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/SourceCodePro.zip"
+    wget -qO "$ZIP" "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/FiraCode.zip"
     mkdir -p "$OUT"
     unzip -qq "$ZIP" -d "$OUT" '*.ttf'
-    sudo mkdir -p /usr/share/fonts/saucecode-pro
-    sudo mv "$OUT"/*.ttf /usr/share/fonts/saucecode-pro
+    sudo mkdir -p /usr/share/fonts/firacode
+    sudo mv "$OUT"/*.ttf /usr/share/fonts/firacode
     sudo fc-cache -s -f >/dev/null
 }
 
