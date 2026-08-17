@@ -106,7 +106,8 @@ symbol = " "
 read_only = " 󰌾"
 read_only_style = "bold red"
 style = "bold cyan"
-format = "[$path]($style)[$read_only]($read_only_style)"
+format = "[$path]($style)[$read_only]($read_only_style) "
+repo_root_format = "[$before_root_path]($before_repo_root_style)[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) "
 truncation_length = 3
 truncation_symbol = ""
 truncate_to_repo = true
@@ -130,11 +131,11 @@ symbol = " "
 [git_branch]
 symbol = " "
 style = "bold orange"
-format = " [$symbol$branch(:$remote_branch)]($style) "
+format = "[$symbol$branch(:$remote_branch)]($style) "
 
 [git_status]
 style = "bold red"
-format = '([$all_status$ahead_behind]($style) )'
+format = '([$all_status$ahead_behind]($style))'
 conflicted = "[󰩈 $count](bold red) "
 ahead = "[󰁝$count](bold green) "
 behind = "[󰁅$count](bold yellow) "
@@ -145,6 +146,12 @@ modified = "[!$count](bold yellow) "
 staged = "[+$count](bold green) "
 renamed = "[»$count](bold purple) "
 deleted = "[✘$count](bold red) "
+
+[git_metrics]
+disabled = false
+added_style = "bold green"
+deleted_style = "bold red"
+format = '([+$added]($added_style) )([-$deleted]($deleted_style) )'
 
 [git_state]
 style = "bold pink"
